@@ -69,8 +69,8 @@ Antes de ejecutar los proyectos, asegúrate de tener instalados:
 
 1. **Clona este repositorio** en tu máquina local:
    ```bash
-   git clone https://github.com/tu-usuario/tu-repositorio.git
-   cd tu-repositorio
+   git clone https://github.com/esmora2/dis.git
+   cd dis
 Estructura del proyecto:
 css
 Copiar código
