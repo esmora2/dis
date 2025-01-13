@@ -19,7 +19,7 @@ Antes de ejecutar los proyectos, asegúrate de tener instalados:
 1. **Clona este repositorio** en tu máquina local:
    ```bash
    git clone https://github.com/esmora2/dis.git
-   cd tu-repositorio
+   cd dis
 
 
 ## Generar los archivos JAR
