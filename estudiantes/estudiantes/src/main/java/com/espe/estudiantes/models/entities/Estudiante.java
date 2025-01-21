@@ -1,6 +1,14 @@
 package com.espe.estudiantes.models.entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.Date;
 
@@ -12,16 +20,29 @@ public class Estudiante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column (nullable = false)
+
+    @NotEmpty
+    @Column (nullable = false, length = 100)
     private String nombre;
+
+    @NotEmpty
     @Column (nullable = false)
     private String apellido;
+
+    @Email
+    @NotEmpty
     @Column (nullable = false)
     private String email;
+
+
     @Column (nullable = false)
     private Date fecha_nacimiento;
+
+
     @Column (nullable = false)
     private String telefono;
+
+
     @Column (nullable = false)
     private String creado_en;
 

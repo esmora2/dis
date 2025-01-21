@@ -2,12 +2,17 @@ package com.espe.estudiantes.controllers;
 
 import com.espe.estudiantes.models.entities.Estudiante;
 import com.espe.estudiantes.services.EstudiantesService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/estudiantes")
@@ -17,9 +22,25 @@ public class EstudianteController {
     private EstudiantesService service;
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Estudiante estudiante ){
+    public ResponseEntity<?> crear(@Valid @RequestBody Estudiante estudiante, BindingResult result) {
+        // Verificar si hay errores en la validación
+        if (result.hasErrors()) {
+            // Crear un mapa para almacenar los mensajes de error
+            Map<String, String> errores = new HashMap<>();
+
+            // Recorrer los errores y agregarlos al mapa
+            result.getFieldErrors().forEach(err -> {
+                errores.put(err.getField(), err.getDefaultMessage());
+            });
+
+            // Retornar una respuesta con código 400 (Bad Request) y los errores
+            return ResponseEntity.badRequest().body(errores);
+        }
+
+        // Guardar el estudiante y retornar una respuesta con código 201 (Created)
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(estudiante));
     }
+
 
     @GetMapping
     public ResponseEntity<?> listar(){ return ResponseEntity.ok(service.findAll()); }

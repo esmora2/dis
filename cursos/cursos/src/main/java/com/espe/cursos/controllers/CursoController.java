@@ -1,12 +1,16 @@
 package com.espe.cursos.controllers;
 
+import com.espe.cursos.models.Usuario;
 import com.espe.cursos.models.entities.Curso;
 import com.espe.cursos.services.CursosService;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 @RestController
@@ -60,4 +64,22 @@ public class CursoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Curso no encontrado para eliminar");
         }
     }
+
+    @PostMapping("/{id}/estudiantes")
+    public ResponseEntity<?> agregarUsuario(@RequestBody Usuario usuario, @PathVariable Long id) {
+        try {
+            Optional<Usuario> optionalUsuario = service.addUser(usuario, id);
+            if (optionalUsuario.isPresent()) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(optionalUsuario.get());
+            }
+        } catch (FeignException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("Error", "Usuario o curso no encontrado. " + e.getMessage()));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+
+
 }

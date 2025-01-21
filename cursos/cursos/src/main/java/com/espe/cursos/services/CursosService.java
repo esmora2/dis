@@ -1,5 +1,6 @@
 package com.espe.cursos.services;
 
+import com.espe.cursos.models.Usuario;
 import com.espe.cursos.models.entities.Curso;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface CursosService {
     Optional<Curso> findById(Long id);
     Curso save(Curso curso);
     void deleteById(Long id);
+
+    Optional<Usuario> addUser(Usuario usuario, Long id);
 }
