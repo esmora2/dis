@@ -62,19 +62,29 @@ public class CursoServiceImpl implements CursosService {
             // Consultar usuario desde el microservicio de estudiantes
             Usuario usuarioTemp = clientRest.findById(usuario.getId());
 
+            if (usuarioTemp == null) {
+                throw new IllegalArgumentException("El usuario no existe en el servicio de estudiantes.");
+            }
+
             // Crear y guardar la relación Curso-Usuario
             CursoUsuario cursoUsuario = new CursoUsuario();
             cursoUsuario.setUsuarioId(usuarioTemp.getId());
-            cursoUsuario = cursoUsuarioRepository.save(cursoUsuario); // Persistir CursoUsuario
+            cursoUsuario.setCurso(curso); // Asignar el curso al CursoUsuario
+
+            // Persistir CursoUsuario
+            cursoUsuario = cursoUsuarioRepository.save(cursoUsuario);
 
             // Asociar el CursoUsuario al curso
             curso.addCursoUsuario(cursoUsuario);
 
             // Guardar cambios en el curso
             repository.save(curso);
+
             return Optional.of(usuarioTemp);
         }
-        return Optional.empty();
+
+        throw new IllegalArgumentException("Curso no encontrado.");
     }
+
 
 }

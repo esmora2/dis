@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+  # Base de datos MySQL para el servicio 'cursos'
   mysql:
     image: mysql:8.0
     container_name: mysql-container
@@ -10,10 +11,31 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data_mysql:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root --password=admin || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Base de datos PostgreSQL para el servicio 'estudiantes'
+  postgres:
+    image: postgres:15.3
+    container_name: postgres-container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: sisdb2025
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data_postgres:/var/lib/postgresql/data
     networks:
       - app-network
 
+  # Servicio 'cursos'
   cursos:
     build:
       context: ./cursos/cursos
@@ -32,6 +54,7 @@ services:
     networks:
       - app-network
 
+  # Servicio 'estudiantes'
   estudiantes:
     build:
       context: ./estudiantes/estudiantes
@@ -40,18 +63,19 @@ services:
     ports:
       - "8003:8003"
     environment:
-      DB_HOST: mysql-container
-      DB_PORT: 3306
+      DB_HOST: postgres-container
+      DB_PORT: 5432
       DB_NAME: sisdb2025
-      DB_USERNAME: root
+      DB_USERNAME: postgres
       DB_PASSWORD: admin
     depends_on:
-      - mysql
+      - postgres
     networks:
       - app-network
 
 volumes:
-  db_data:
+  db_data_mysql:
+  db_data_postgres:
 
 networks:
   app-network:
