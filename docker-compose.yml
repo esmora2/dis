@@ -9,7 +9,7 @@ services:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: sisdb2025
     ports:
-      - "3307:3306"
+      - "3307:3306" # Puerto expuesto para conexiones externas
     volumes:
       - db_data_mysql:/var/lib/mysql
     networks:
@@ -29,11 +29,16 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: sisdb2025
     ports:
-      - "5433:5432"
+      - "5433:5432" # Puerto expuesto para conexiones externas
     volumes:
       - db_data_postgres:/var/lib/postgresql/data
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Servicio 'cursos'
   cursos:
@@ -44,11 +49,9 @@ services:
     ports:
       - "8002:8002"
     environment:
-      DB_HOST: mysql-container
-      DB_PORT: 3306
-      DB_NAME: sisdb2025
-      DB_USERNAME: root
-      DB_PASSWORD: admin
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/sisdb2025
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
     depends_on:
       - mysql
     networks:
@@ -63,11 +66,9 @@ services:
     ports:
       - "8003:8003"
     environment:
-      DB_HOST: postgres-container
-      DB_PORT: 5432
-      DB_NAME: sisdb2025
-      DB_USERNAME: postgres
-      DB_PASSWORD: admin
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-container:5432/sisdb2025
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
     depends_on:
       - postgres
     networks:
@@ -79,3 +80,4 @@ volumes:
 
 networks:
   app-network:
+    driver: bridge

@@ -3,13 +3,15 @@ package com.espe.cursos.models.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="cursos_usuarios")
+@Table(name = "cursos_usuarios", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"curso_id", "usuario_id"})
+})
 public class CursoUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "usuario_id", unique = true, nullable = false)
+    @Column(name = "usuario_id", nullable = false)
     private Long usuarioId;
 
     @ManyToOne
@@ -41,3 +43,4 @@ public class CursoUsuario {
         this.curso = curso;
     }
 }
+
