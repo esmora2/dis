@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-  # Base de datos MySQL para el servicio 'cursos'
   mysql:
     image: mysql:8.0
     container_name: mysql-container
@@ -9,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: sisdb2025
     ports:
-      - "3307:3306" # Puerto expuesto para conexiones externas
+      - "3307:3306"
     volumes:
       - db_data_mysql:/var/lib/mysql
     networks:
@@ -20,7 +19,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Base de datos PostgreSQL para el servicio 'estudiantes'
   postgres:
     image: postgres:15.3
     container_name: postgres-container
@@ -29,7 +27,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: sisdb2025
     ports:
-      - "5433:5432" # Puerto expuesto para conexiones externas
+      - "5433:5432"
     volumes:
       - db_data_postgres:/var/lib/postgresql/data
     networks:
@@ -40,7 +38,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Servicio 'cursos'
   cursos:
     build:
       context: ./cursos/cursos
@@ -49,15 +46,16 @@ services:
     ports:
       - "8002:8002"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/sisdb2025
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
+      DB_HOST: mysql
+      DB_DATABASE: sisdb2025
+      DB_USER: root
+      DB_PASS: admin
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - app-network
 
-  # Servicio 'estudiantes'
   estudiantes:
     build:
       context: ./estudiantes/estudiantes
@@ -66,11 +64,26 @@ services:
     ports:
       - "8003:8003"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-container:5432/sisdb2025
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: admin
+      DB_HOST: postgres
+      DB_DATABASE: sisdb2025
+      DB_USER: postgres
+      DB_PASS: admin
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-container
+    ports:
+      - "3000:80"
+    depends_on:
+      - cursos
+      - estudiantes
     networks:
       - app-network
 
