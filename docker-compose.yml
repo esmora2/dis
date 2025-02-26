@@ -86,6 +86,10 @@ services:
       - estudiantes
     networks:
       - app-network
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+    environment:
+      - REACT_APP_API_BASE_URL=http://frontend-container
 
 volumes:
   db_data_mysql:

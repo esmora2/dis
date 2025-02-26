@@ -1,38 +1,175 @@
-.App {
-  text-align: center;
+/* General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f3f8ff; /* Suave color de fondo */
+  color: #2d3436; /* Texto neutro */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+
+h1, h2, h3 {
+  text-align: center;
+  color: #34495e; /* Tono más oscuro */
+  margin-bottom: 20px;
+}
+
+.container {
+  max-width: 90%;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Fullscreen fix */
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+/* Navbar */
+nav {
+  background-color: #82ccdd; /* Color pastel claro */
+  padding: 15px;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+nav ul li a {
+  color: #ffffff; /* Blanco en los enlaces */
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+  background-color: #60a3bc; /* Tono más oscuro del navbar */
+}
+
+/* Form Styles */
+form {
+  background: #ffffff;
+  padding: 20px;
+  border: 1px solid #dfe6e9; /* Bordes claros */
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+form input, form button {
+  width: calc(100% - 20px);
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid #d1d8e0; /* Suave color en bordes */
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+form input:focus {
+  outline: none;
+  border-color: #82ccdd; /* Azul claro en el enfoque */
+  box-shadow: 0 0 8px rgba(130, 204, 221, 0.5);
+}
+
+form button {
+  background-color: #78e08f; /* Verde pastel */
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form button:hover {
+  background-color: #58d68d; /* Verde más oscuro */
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+table th, table td {
+  text-align: left;
+  padding: 15px;
+  border-bottom: 1px solid #dfe6e9; /* Bordes suaves */
+}
+
+table th {
+  background-color: #82ccdd; /* Azul pastel */
+  color: #ffffff;
+}
+
+table tr:nth-child(even) {
+  background-color: #f8f9fa; /* Fondo suave para filas pares */
+}
+
+table tr:hover {
+  background-color: #eaf6f9; /* Azul claro al pasar el ratón */
+}
+
+table button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+button.edit {
+  background-color: #54a0ff; /* Azul brillante */
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+button.edit:hover {
+  background-color: #487eb0; /* Azul oscuro */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+button.delete {
+  background-color: #ff7675; /* Rojo suave */
+  color: white;
+}
+
+button.delete:hover {
+  background-color: #e55039; /* Rojo oscuro */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  table th, table td {
+    font-size: 14px;
+  }
+
+  form input, form button {
+    font-size: 14px;
   }
 }
